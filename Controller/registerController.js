@@ -16,11 +16,11 @@ const handleNewUsers = async (req,res) => {
     try {
         const apiKey = crypto.randomBytes(32).toString('hex')
         const hashedKey = await bcrypt.hash(apiKey, 10)
-        const newUser = {"username": user, "API key": hashedKey}
+        const newUser = {"username": user, "apiKey": hashedKey}
         usersDB.setUsers([...usersDB.users,newUser])
         await fsPromises.writeFile(path.join(__dirname, '..', 'model', 'users.json'), JSON.stringify(usersDB.users))
         console.log(usersDB.users)
-        res.status(200).json({"message": `New user ${user} created`})
+        res.status(200).json({"message": `New user ${user} created your API key is ${apiKey}`})
     } catch (e) {
         res.status(409).json({"error": e.message})
     }
